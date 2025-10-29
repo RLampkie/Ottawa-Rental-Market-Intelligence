@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# SQLite / DB files
+*.sqlite
+*.sqlite3
+*.db
+*.db-wal
+*.db-shm
+
+# Tableau
+*.twbx.backup
+*.log
+
+# Misc
+*.tmp
+*.bak
+~$*
+
