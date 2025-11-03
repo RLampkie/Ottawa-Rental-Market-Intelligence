@@ -13,6 +13,19 @@ def _require_cols(df: pd.DataFrame, required: list[str], label: str):
         )
 
 
+def _read_any(path: Path) -> pd.DataFrame:
+    suffix = path.suffix.lower()
+    if suffix in {".csv"}:
+        return pd.read_csv(path)
+    if suffix in {".xlsx", ".xls"}:
+        return pd.read_excel(path)
+    # fallback try CSV
+    try:
+        return pd.read_csv(path)
+    except Exception:
+        return pd.read_excel(path)
+
+
 def clean_and_merge(
     cmhc_path: Path,
     boc_path: Path,
@@ -30,7 +43,7 @@ def clean_and_merge(
     """Load source CSVs, standardize columns, merge by Year, and compute metrics."""
 
     # CMHC
-    cmhc = pd.read_csv(cmhc_path)
+    cmhc = _read_any(cmhc_path)
     _require_cols(cmhc, [cmhc_year_col, cmhc_rent_col], "CMHC (rents)")
     cmhc_renamed = cmhc[[cmhc_year_col, cmhc_rent_col] + ([cmhc_vacancy_col] if cmhc_vacancy_col and cmhc_vacancy_col in cmhc.columns else [])].rename(
         columns={
@@ -44,12 +57,12 @@ def clean_and_merge(
         cmhc_renamed = cmhc_renamed.drop(columns=["__x__"])
 
     # BoC
-    boc = pd.read_csv(boc_path)
+    boc = _read_any(boc_path)
     _require_cols(boc, [boc_year_col, boc_rate_col], "BoC (interest rates)")
     boc_renamed = boc[[boc_year_col, boc_rate_col]].rename(columns={boc_year_col: "Year", boc_rate_col: "Interest_Rate"})
 
     # StatCan
-    stat = pd.read_csv(statcan_path)
+    stat = _read_any(statcan_path)
     _require_cols(stat, [statcan_year_col, statcan_emp_col], "StatCan (employment)")
     pick = [statcan_year_col, statcan_emp_col]
     if statcan_unemp_col and statcan_unemp_col in stat.columns:
@@ -142,4 +155,3 @@ def main(argv: list[str] | None = None):
 
 if __name__ == "__main__":
     main()
-
