@@ -1,6 +1,6 @@
 # Ottawa Rental Market Intelligence
 
-Analyze Ottawa's rental market and macroeconomic drivers to produce a concise, recruiter-ready dashboard and narrative. Built with Python 3.11, SQLite, and Tableau.
+Analyze Ottawa's rental market and macroeconomic drivers to produce a concise dashboard with insights. Built with Python 3.11, SQLite, and Tableau.
 
 ## Goals
 - Consolidate rental (CMHC) and macro data (Bank of Canada, Statistics Canada)
